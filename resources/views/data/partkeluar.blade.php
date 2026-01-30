@@ -106,16 +106,16 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="position: relative; z-index: 1060;">
                     <h5 class="modal-title" id="barcodeScannerModalLabel">Scan Barcode PIC</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" id="modalCloseX" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="reader" style="width: 100%;"></div>
                     <div id="scanResult" class="mt-3 alert alert-success" style="display: none;"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <div class="modal-footer" style="position: relative; z-index: 1060;">
+                    <button type="button" class="btn btn-secondary" id="modalCloseBtn">Tutup</button>
                 </div>
             </div>
         </div>
@@ -145,6 +145,12 @@
         /* Remove mirror effect from barcode scanner */
         #reader video {
             transform: scaleX(-1);
+        }
+
+        #barcodeScannerModal .modal-header,
+        #barcodeScannerModal .modal-footer {
+            position: relative;
+            z-index: 1060;
         }
     </style>
 
@@ -292,8 +298,24 @@
                     html5QrCode = null;
                 }).catch((err) => {
                     console.error('Error stopping scanner:', err);
+                    // Force cleanup even if stop fails
+                    try {
+                        html5QrCode.clear();
+                    } catch (e) {
+                        console.error('Error clearing scanner:', e);
+                    }
+                    html5QrCode = null;
                 });
             }
         }
+        // Close modal function
+        function closeModal() {
+            stopScanner();
+            barcodeScannerModal.hide();
+        }
+
+        // Add explicit close button handlers
+        document.getElementById('modalCloseX').addEventListener('click', closeModal);
+        document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     </script>
 @endsection
