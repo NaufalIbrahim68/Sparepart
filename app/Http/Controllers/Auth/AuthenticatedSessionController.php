@@ -26,26 +26,26 @@ class AuthenticatedSessionController extends Controller
             'name' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
-    
+
         $credentials = $request->only('name', 'password');
-    
+
         // Fetch the user by name
         $user = \App\Models\User::where('name', $request->input('name'))->first();
-    
+
         // Check if the user exists and the password matches
         if ($user && $user->password === $request->input('password')) {
             Auth::login($user);
             $request->session()->regenerate();
-    
+
             // Redirect based on user role
             return redirect()->intended($user->isAdmin() ? 'dashboard' : 'dashboarduser');
         }
-    
+
         throw ValidationException::withMessages([
             'name' => 'Username atau Password salah tolong login kembali',
         ]);
     }
-    
+
 
     /**
      * Destroy an authenticated session.
@@ -57,5 +57,4 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
         return redirect('/login');
     }
-
 }

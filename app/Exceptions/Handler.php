@@ -38,10 +38,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof \Exception && !($exception instanceof \Illuminate\Validation\ValidationException)) {
-            return response()->view('error', [], 500);
-        }
+        // if ($exception instanceof \Exception && !($exception instanceof \Illuminate\Validation\ValidationException)) {
+        //     return response()->view('error', [], 500);
+        // }
         return parent::render($request, $exception);
     }
-    
 }

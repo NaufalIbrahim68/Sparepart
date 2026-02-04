@@ -12,11 +12,12 @@ class PartKeluar extends Model
     protected $table = 'part_keluar';
     protected $primaryKey = 'id_pk';
     protected $fillable = [
-        'tanggal', 
-        'pic', 
-        'keperluan', 
+        'tanggal',
+        'pic',
+        'keperluan',
         'nama_barang',
-        'kode_barang', 
-        'qty'
+        'kode_barang',
+        'qty',
+        'flag'
     ];
 }

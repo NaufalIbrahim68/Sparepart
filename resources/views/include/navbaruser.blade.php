@@ -8,7 +8,8 @@
                         <img src="/B/assets/images/AVI.png" alt="" height="30">
                     </span>
                     <span class="logo-lg">
-                        <img src="/B/assets/images/AVI.png" alt="" height="24"> <span class="logo-txt">Astra Visteon Indonesia</span>
+                        <img src="/B/assets/images/AVI.png" alt="" height="24"> <span class="logo-txt">Astra
+                            Visteon Indonesia</span>
                     </span>
                 </a>
 
@@ -17,7 +18,8 @@
                         <img src="/B/assets/images/AVI.png" alt="" height="10">
                     </span>
                     <span class="logo-lg">
-                    <img src="/B/assets/images/AVI.png" alt="" height="50"> <span class="logo-txt"></span>
+                        <img src="/B/assets/images/AVI.png" alt="" height="50"> <span
+                            class="logo-txt"></span>
                     </span>
                 </a>
             </div>
@@ -26,14 +28,14 @@
                 <i class="fa fa-fw fa-bars"></i>
             </button>
 
-            
+
         </div>
 
         <div class="d-flex">
 
             <div class="dropdown d-inline-block d-lg-none ms-2">
                 <button type="button" class="btn header-item" id="page-header-search-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i data-feather="search" class="icon-lg"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
@@ -42,7 +44,8 @@
                     <form class="p-3">
                         <div class="form-group m-0">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+                                <input type="text" class="form-control" placeholder="Search ..."
+                                    aria-label="Search Result">
 
                                 <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
                             </div>
@@ -52,15 +55,17 @@
             </div>
 
             <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="/B/assets/images/avatar.png" alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">Admin</span>
+                <button type="button" class="btn header-item bg-light-subtle border-start border-end"
+                    id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle header-profile-user" src="/B/assets/images/avatar.png"
+                        alt="Header Avatar">
+                    <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name ?? 'User' }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                    <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                    <a class="dropdown-item" href="{{ route('profile.edit') }}"><i
+                            class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
                     <div class="dropdown-divider"></div>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
                         @csrf
@@ -73,5 +78,3 @@
         </div>
     </div>
 </header>
-
-            

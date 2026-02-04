@@ -38,8 +38,8 @@ Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.de
 Route::middleware('auth')->group(function () {
     //dashboard
     Route::get('/spareparts-data', [SparepartController::class, 'getSpareparts'])->name('spareparts.data');
-    Route::get('/dashboard', [SparepartController::class,'index'])->name('dashboard');
-    Route::get('/dashboarduser', [SparepartControllerUser::class,'index'])->name('dashboarduser');
+    Route::get('/dashboard', [SparepartController::class, 'index'])->name('dashboard');
+    Route::get('/dashboarduser', [SparepartControllerUser::class, 'index'])->name('dashboarduser');
     //profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -47,13 +47,13 @@ Route::middleware('auth')->group(function () {
     //export excel
     Route::get('/spareparts/export', [SparepartController::class, 'export'])->name('spareparts.export');
     //import excel
-    Route::get('/import', function() {
-        return view('pemindahan.import'); 
+    Route::get('/import', function () {
+        return view('pemindahan.import');
     })->name('spareparts.import.view');
 
     Route::get('/import/data', [DataController::class, 'getSpareparts'])->name('spareparts.table');
     Route::post('/import', [SparepartController::class, 'import'])->name('spareparts.import');
-    
+
     //folder data komponen
     Route::resource('/data', DataController::class);
     //folder data komponen baru
@@ -66,6 +66,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/partmasuk/get-pr-details/{ref_pp}', [PartMasukController::class, 'getPrDetails'])->name('partmasuk.get-pr-details');
     //input part keluar
     Route::resource('/partkeluar', PartKeluarController::class);
+    Route::patch('/partkeluar/{id}/approve', [PartKeluarController::class, 'approve'])->name('partkeluar.approve');
+    Route::get('/partkeluar-export', [PartKeluarController::class, 'export'])->name('partkeluar.export');
     Route::resource('/partkeluaruser', PartKeluarControllerUser::class);
     //input stock part
     Route::resource('/stock', StockController::class);
@@ -91,5 +93,4 @@ Route::middleware('auth')->group(function () {
 });
 
 
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/auth.php';

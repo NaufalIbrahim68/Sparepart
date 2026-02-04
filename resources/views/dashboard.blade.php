@@ -77,10 +77,10 @@
                                 <span><a href="{{ route('purchase.new.create') }}" data-key="t-orders" class="fas fa-edit" style="color: #000">Check It</a></span>
                             </div>
                         </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
+                    </div>
+                </div>
             </div>
-        </div><!-- end row -->
+        </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
