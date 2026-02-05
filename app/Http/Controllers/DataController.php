@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
-use App\Models\Namkod;
 use App\Models\Test;
 use App\Models\Sparepart;
 use Illuminate\Http\Request;
@@ -16,10 +15,7 @@ class DataController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-      
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
@@ -27,9 +23,9 @@ class DataController extends Controller
     public function create()
     {
         $lines = Data::select('line')
-                       ->whereNotNull('no_station')
-                       ->distinct()
-                       ->pluck('line');
+            ->whereNotNull('no_station')
+            ->distinct()
+            ->pluck('line');
 
         $noStations = [];
         $namaStations = [];
@@ -37,15 +33,15 @@ class DataController extends Controller
             $line = session('line');
             // Query untuk mendapatkan No Station dan Nama Station berdasarkan Line
             $noStations = Data::where('line', $line)
-                                ->whereNotNull('no_station')
-                                ->distinct()
-                              ->pluck('no_station');
+                ->whereNotNull('no_station')
+                ->distinct()
+                ->pluck('no_station');
             $namaStations = Data::where('line', $line)
-                                ->whereNotNull('nama_station')
-                                ->distinct()
-                                ->pluck('nama_station');
+                ->whereNotNull('nama_station')
+                ->distinct()
+                ->pluck('nama_station');
         }
-    
+
         return view('data.create', compact('lines', 'noStations', 'namaStations'));
     }
 
@@ -59,19 +55,19 @@ class DataController extends Controller
             'nama_station' => 'required|string|max:255',
             'nama_barang' => 'required|string|max:255',
             'kode_barang' => 'required|string|max:255',
-            'qty' => 'nullable|integer|min:0', 
+            'qty' => 'nullable|integer|min:0',
         ]);
 
         try {
             $data = $request->all();
-            $data['created_at'] = Carbon::now('Asia/Jakarta'); 
+            $data['created_at'] = Carbon::now('Asia/Jakarta');
             $data['updated_at'] = Carbon::now('Asia/Jakarta');
-            
+
             Data::create($data);
 
             $sparepart = Sparepart::where('nama_barang', $request->input('nama_barang'))
-                                ->where('kode_barang', $request->input('kode_barang'))
-                                ->first();
+                ->where('kode_barang', $request->input('kode_barang'))
+                ->first();
 
             if ($sparepart) {
                 switch ($request->input('line')) {
@@ -127,7 +123,7 @@ class DataController extends Controller
 
                 // Hitung ms_ss sebagai 10% dari total_qty
                 $sparepart->ms_ss = $sparepart->total_qty * 0.10;
-                
+
                 // Hitung min_stock 
                 $sparepart->min_stock = $sparepart->leadtime / $sparepart->lifetime * $sparepart->total_qty + $sparepart->ms_ss;
 
@@ -191,24 +187,24 @@ class DataController extends Controller
 
                 // Hitung total_qty
                 $sparepartData['total_qty'] = ($sparepartData['fa_l1'] ?? 0)
-                + ($sparepartData['fa_l2'] ?? 0)
-                + ($sparepartData['fa_l3'] ?? 0)
-                + ($sparepartData['fa_l5'] ?? 0)
-                + ($sparepartData['fa_l6'] ?? 0)
-                + ($sparepartData['fa_rework1'] ?? 0)
-                + ($sparepartData['fa_rework2'] ?? 0)
-                + ($sparepartData['fa_sab'] ?? 0)
-                + ($sparepartData['smt_offline'] ?? 0)
-                + ($sparepartData['smt_l1_top'] ?? 0)
-                + ($sparepartData['smt_l1_bot'] ?? 0)
-                + ($sparepartData['smt_l1_bckend'] ?? 0)
-                + ($sparepartData['smt_l2_topbot'] ?? 0)
-                + ($sparepartData['smt_l2_bckend'] ?? 0)
-                + ($sparepartData['utility'] ?? 0);
+                    + ($sparepartData['fa_l2'] ?? 0)
+                    + ($sparepartData['fa_l3'] ?? 0)
+                    + ($sparepartData['fa_l5'] ?? 0)
+                    + ($sparepartData['fa_l6'] ?? 0)
+                    + ($sparepartData['fa_rework1'] ?? 0)
+                    + ($sparepartData['fa_rework2'] ?? 0)
+                    + ($sparepartData['fa_sab'] ?? 0)
+                    + ($sparepartData['smt_offline'] ?? 0)
+                    + ($sparepartData['smt_l1_top'] ?? 0)
+                    + ($sparepartData['smt_l1_bot'] ?? 0)
+                    + ($sparepartData['smt_l1_bckend'] ?? 0)
+                    + ($sparepartData['smt_l2_topbot'] ?? 0)
+                    + ($sparepartData['smt_l2_bckend'] ?? 0)
+                    + ($sparepartData['utility'] ?? 0);
 
                 // Hitung ms_ss sebagai 10% dari total_qty
                 $sparepartData['ms_ss'] = $sparepartData['total_qty'] * 0.10;
-                
+
                 // Hitung min_stock
                 $sparepartData['min_stock'] = $sparepartData['leadtime'] / $sparepartData['lifetime'] * $sparepartData['total_qty'] + $sparepartData['ms_ss'];
 
@@ -269,10 +265,10 @@ class DataController extends Controller
         }
 
         $noStations = Data::where('line', $line)
-                        ->whereNotNull('no_station')
-                        ->pluck('no_station')
-                        ->unique()
-                        ->values(); 
+            ->whereNotNull('no_station')
+            ->pluck('no_station')
+            ->unique()
+            ->values();
 
         return response()->json(['no_stations' => $noStations]);
     }
@@ -281,14 +277,14 @@ class DataController extends Controller
     {
         if (strpos($line_or_no_station, 'SMT') !== false) {
             $namaStations = Data::where('line', $line_or_no_station)
-                                ->pluck('nama_station')
-                                ->unique()
-                                ->values();
+                ->pluck('nama_station')
+                ->unique()
+                ->values();
         } else {
             $namaStations = Data::where('no_station', $line_or_no_station)
-                                ->pluck('nama_station')
-                                ->unique()
-                                ->values();
+                ->pluck('nama_station')
+                ->unique()
+                ->values();
         }
 
         return response()->json(['nama_stations' => $namaStations]);
@@ -296,23 +292,27 @@ class DataController extends Controller
 
     public function searchNamaBarang($term)
     {
-        $results = Namkod::where('nama_barang', 'like', "%{$term}%")
-                          ->get(['nama_barang', 'kode_barang']);
+        $results = Sparepart::select('nama_barang', 'kode_barang')
+            ->distinct()
+            ->where('nama_barang', 'like', "%{$term}%")
+            ->get();
 
         return response()->json($results);
     }
-    
+
     public function getLines()
     {
         $lines = Data::select('line')->distinct()->pluck('line');
         return response()->json(['lines' => $lines]);
-    }    
+    }
 
 
     public function getSpareparts()
     {
         $spareparts = Test::select([
-            'A', 'B', 'C' 
+            'A',
+            'B',
+            'C'
         ]);
 
         return DataTables::of($spareparts)
@@ -322,8 +322,8 @@ class DataController extends Controller
     public function getSparepartsfix()
     {
         $spareparts = Sparepart::select([
-            'nama_barang', 
-            'kode_barang', 
+            'nama_barang',
+            'kode_barang',
             'address',
             'total_qty',
             'leadtime',
@@ -335,9 +335,4 @@ class DataController extends Controller
         return DataTables::of($spareparts)
             ->make(true);
     }
-
-   
-
-
-    
 }

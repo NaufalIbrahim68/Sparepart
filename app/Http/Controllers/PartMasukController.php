@@ -100,32 +100,5 @@ class PartMasukController extends Controller
         }
     }
 
-    public function show(PartMasuk $data)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PartMasuk $data)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PartMasuk $data)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PartMasuk $data)
-    {
-        //
-    }
+   
 }

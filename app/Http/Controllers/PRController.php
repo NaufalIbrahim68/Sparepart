@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
-use App\Models\Namkod;
 use App\Models\PurchaseRequest;
 use App\Models\Sparepart;
 use Illuminate\Http\Request;
@@ -16,16 +15,13 @@ class PRController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {    
+    {
         return view('data.purchase');
     }
 
@@ -41,7 +37,7 @@ class PRController extends Controller
             'kode_barang.*' => 'required|string|max:255',
             'qty_pr.*' => 'nullable|integer|min:0',
         ]);
-    
+
         try {
             foreach ($validatedData['nama_barang'] as $index => $nama_barang) {
                 PurchaseRequest::create([
@@ -53,13 +49,13 @@ class PRController extends Controller
                     'sisa_rcvid' => $validatedData['qty_pr'][$index] ?? 0,
                 ]);
             }
-    
+
             return redirect()->route('purchase.create')->with('success', 'Data berhasil disimpan');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data');
         }
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -97,18 +93,18 @@ class PRController extends Controller
     public function searchNamaBarang($term)
     {
         $results = PurchaseRequest::where('ref_pp', 'like', "%{$term}%")
-                          ->distinct()
-                          ->get(['ref_pp']);
+            ->distinct()
+            ->get(['ref_pp']);
 
         return response()->json($results);
     }
-    
+
 
     public function getSparepartsfix()
     {
         $spareparts = Sparepart::select([
-            'nama_barang', 
-            'kode_barang', 
+            'nama_barang',
+            'kode_barang',
             'address',
             'total_qty_pr',
             'leadtime',
@@ -120,9 +116,4 @@ class PRController extends Controller
         return DataTables::of($spareparts)
             ->make(true);
     }
-
-   
-
-
-    
 }

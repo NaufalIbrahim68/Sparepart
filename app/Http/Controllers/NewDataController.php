@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
-use App\Models\Namkod;
 use App\Models\PartMasuk;
+use App\Models\Sparepart;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -13,10 +13,7 @@ class NewDataController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
@@ -35,8 +32,8 @@ class NewDataController extends Controller
         ]);
 
         $isDuplicate = Data::where('nama_barang', $request->nama_barang)
-                            ->where('kode_barang', $request->kode_barang)
-                            ->exists();
+            ->where('kode_barang', $request->kode_barang)
+            ->exists();
 
         if ($isDuplicate) {
             return redirect()->route('data.new.create')->with('error', 'Nama Barang dan Kode Barang sudah ada dalam database.');
@@ -44,7 +41,6 @@ class NewDataController extends Controller
 
         try {
             Data::create($request->all());
-            Namkod::create($request->all());
 
             return redirect()->route('data.new.create')->with('success', 'Data berhasil disimpan.');
         } catch (Exception $e) {
@@ -91,10 +87,10 @@ class NewDataController extends Controller
         }
 
         $noStations = Data::where('line', $line)
-                        ->whereNotNull('no_station')
-                        ->pluck('no_station')
-                        ->unique()
-                        ->values(); 
+            ->whereNotNull('no_station')
+            ->pluck('no_station')
+            ->unique()
+            ->values();
 
         return response()->json(['no_stations' => $noStations]);
     }
@@ -102,20 +98,20 @@ class NewDataController extends Controller
     public function getNamaStationsByLine($line)
     {
         $namaStations = Data::where('line', $line)
-                            ->pluck('nama_station')
-                            ->unique()
-                            ->values();
+            ->pluck('nama_station')
+            ->unique()
+            ->values();
 
         return response()->json(['nama_stations' => $namaStations]);
     }
 
     public function searchNamaBarang($term)
     {
-        $results = Namkod::where('nama_barang', 'like', "%{$term}%")
-                          ->get(['nama_barang', 'kode_barang']);
+        $results = Sparepart::select('nama_barang', 'kode_barang')
+            ->distinct()
+            ->where('nama_barang', 'like', "%{$term}%")
+            ->get();
 
         return response()->json($results);
     }
-
-    
 }

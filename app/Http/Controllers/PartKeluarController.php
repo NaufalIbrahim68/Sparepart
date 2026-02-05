@@ -32,7 +32,7 @@ class PartKeluarController extends Controller
 
         $partKeluar = $query->orderBy('tanggal', 'desc')
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(10);
 
         return view('data.partkeluar_index', compact('partKeluar'));
     }
