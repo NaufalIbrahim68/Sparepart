@@ -39,7 +39,7 @@
                         <span data-key="t-ecommerce">User</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{ route('users.index') }}" data-key="t-orders">User Account</a></li>
+                        <li><a href="{{ route('users.index') }}" data-key="t-orders">Manajemen User</a></li>
                     </ul>
                 </li>
 
