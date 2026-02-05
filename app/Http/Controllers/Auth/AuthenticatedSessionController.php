@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
@@ -32,8 +33,8 @@ class AuthenticatedSessionController extends Controller
         // Fetch the user by name
         $user = \App\Models\User::where('name', $request->input('name'))->first();
 
-        // Check if the user exists and the password matches
-        if ($user && $user->password === $request->input('password')) {
+        // Check if the user exists and the password matches (using hash verification)
+        if ($user && Hash::check($request->input('password'), $user->password)) {
             Auth::login($user);
             $request->session()->regenerate();
 
