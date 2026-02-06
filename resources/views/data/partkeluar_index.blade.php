@@ -20,21 +20,29 @@
                                 </a>
                             </div>
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                <form method="GET" class="d-flex align-items-center gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <label for="tanggal" class="form-label mb-0">Tanggal:</label>
-                                        <input type="date" name="tanggal" id="tanggal" class="form-control"
-                                            style="min-width: 200px;" value="{{ request('tanggal') }}" required>
-                                    </div>
-                                    <button type="submit" formaction="{{ route('partkeluar.index') }}"
-                                        class="btn btn-info">
-                                        <i data-feather="filter"></i> Filter
-                                    </button>
-                                    <button type="submit" formaction="{{ route('partkeluar.export') }}"
-                                        class="btn btn-success">
-                                        <i data-feather="download"></i> Export Excel
-                                    </button>
-                                </form>
+                                <div class="d-flex align-items-center gap-2">
+                                    <form method="GET" class="d-flex align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="tanggal" class="form-label mb-0">Tanggal:</label>
+                                            <input type="date" name="tanggal" id="tanggal" class="form-control"
+                                                style="min-width: 200px;" value="{{ request('tanggal') }}" required>
+                                        </div>
+                                        <button type="submit" formaction="{{ route('partkeluar.index') }}"
+                                            class="btn btn-info">
+                                            <i data-feather="filter"></i> Filter
+                                        </button>
+                                        <a href="{{ route('partkeluar.index') }}" class="btn btn-secondary">
+                                        <i data-feather="refresh-cw"></i> Reset
+                                    </a>
+                                
+                                        <button type="submit" formaction="{{ route('partkeluar.export') }}"
+                                            class="btn btn-success">
+                                            <i data-feather="download"></i> Export Excel
+                                        </button>
+                            </div>
+                                    </form>
+
+                                    
 
                                 <form action="{{ route('partkeluar.index') }}" method="GET"
                                     class="d-flex align-items-center gap-2">
