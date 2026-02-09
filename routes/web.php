@@ -35,17 +35,25 @@ Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 
+// Routes accessible by both admin and user (authenticated users)
 Route::middleware('auth')->group(function () {
-    //dashboard
+    //spareparts data for DataTables (accessible by both roles)
     Route::get('/spareparts-data', [SparepartController::class, 'getSpareparts'])->name('spareparts.data');
-    Route::get('/dashboard', [SparepartController::class, 'index'])->name('dashboard');
-    Route::get('/dashboarduser', [SparepartControllerUser::class, 'index'])->name('dashboarduser');
-    //profile
+
+    //profile (accessible by both roles)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin-only routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    //dashboard
+    Route::get('/dashboard', [SparepartController::class, 'index'])->name('dashboard');
+
     //export excel
     Route::get('/spareparts/export', [SparepartController::class, 'export'])->name('spareparts.export');
+
     //import excel
     Route::get('/import', function () {
         return view('pemindahan.import');
@@ -56,31 +64,38 @@ Route::middleware('auth')->group(function () {
 
     //folder data komponen
     Route::resource('/data', DataController::class);
+
     //folder data komponen baru
     Route::prefix('data/new')->group(function () {
         Route::get('/create', [NewDataController::class, 'create'])->name('data.new.create');
         Route::post('/store', [NewDataController::class, 'store'])->name('data.new.store');
     });
+
     //input part masuk
     Route::resource('/partmasuk', PartMasukController::class);
     Route::get('/partmasuk/get-pr-details/{ref_pp}', [PartMasukController::class, 'getPrDetails'])->name('partmasuk.get-pr-details');
-    //input part keluar
+
+    //input part keluar (admin)
     Route::resource('/partkeluar', PartKeluarController::class);
     Route::patch('/partkeluar/{id}/approve', [PartKeluarController::class, 'approve'])->name('partkeluar.approve');
     Route::get('/partkeluar-export', [PartKeluarController::class, 'export'])->name('partkeluar.export');
-    Route::resource('/partkeluaruser', PartKeluarControllerUser::class);
+
     //input stock part
     Route::resource('/stock', StockController::class);
+
     //input harga part
     Route::resource('/harga', HargaController::class);
+
     //fungsi filter
     Route::get('/data/no-stations/{line}', [DataController::class, 'getNoStationsByLine'])->name('data.no-stations');
     Route::get('/data/nama-stations/{line}', [DataController::class, 'getNamaStationsByLine'])->name('data.nama-stations');
     Route::get('/data/search-nama-barang/{term}', [DataController::class, 'searchNamaBarang'])->name('data.search-nama-barang');
     Route::get('/data/search-no-purchase/{term}', [PRController::class, 'searchNamaBarang'])->name('data.search-no-purchase');
     Route::get('/data/lines', [DataController::class, 'getLines'])->name('data.lines');
+
     // purchase request
     Route::resource('/purchase', PRController::class);
+
     //folder data komponen baru
     Route::prefix('purchase/new')->group(function () {
         Route::get('/create', [PRTableController::class, 'create'])->name('purchase.new.create');
@@ -90,6 +105,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/purchase/update/status', [PRTableController::class, 'updateStatus'])->name('purchase.update.status');
         Route::get('/purchase/check-status', [PRTableController::class, 'checkStatus'])->name('purchase.check.status');
     });
+});
+
+// User-only routes
+Route::middleware(['auth', 'role:user'])->group(function () {
+    //dashboard user
+    Route::get('/dashboarduser', [SparepartControllerUser::class, 'index'])->name('dashboarduser');
+
+    //input part keluar (user)
+    Route::resource('/partkeluaruser', PartKeluarControllerUser::class);
 });
 
 
