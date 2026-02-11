@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sparepart;
-use App\Models\Jenis;
 use Exception;
 
 class HargaController extends Controller
@@ -22,17 +21,7 @@ class HargaController extends Controller
      */
     public function create()
     {
-        $uoms = Jenis::select('uom')
-                       ->whereNotNull('uom')
-                       ->distinct()
-                       ->pluck('uom');
-
-        $mata_uangs = Jenis::select('mata_uang')
-                       ->whereNotNull('mata_uang')
-                       ->distinct()
-                       ->pluck('mata_uang');         
-
-        return view('data.harga', compact('uoms','mata_uangs'));
+        return view('data.harga');
     }
 
     /**
@@ -45,7 +34,7 @@ class HargaController extends Controller
             'nama_barang' => 'required|string|max:255',
             'kode_barang' => 'required|string|max:255',
             'harga' => 'required|numeric|min:1',
-            'mata_uang' => 'required|string|max:10', 
+            'mata_uang' => 'required|string|max:10',
             'uom' => 'required|string|max:255',
             'vendor' => 'required|string|max:255',
         ]);
@@ -53,8 +42,8 @@ class HargaController extends Controller
         try {
             // Cari record yang ada
             $sparepart = Sparepart::where('nama_barang', $validatedData['nama_barang'])
-                                ->where('kode_barang', $validatedData['kode_barang'])
-                                ->first();
+                ->where('kode_barang', $validatedData['kode_barang'])
+                ->first();
 
             if ($sparepart) {
                 // Jika record ada, perbarui data
@@ -76,7 +65,6 @@ class HargaController extends Controller
             }
 
             return redirect()->route('harga.create')->with('success', 'Data berhasil disimpan.');
-
         } catch (Exception $e) {
             return redirect()->route('harga.create')->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
