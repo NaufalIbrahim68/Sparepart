@@ -38,9 +38,11 @@
 
                                 <div class="mb-3 row">
                                     <div class="col-md-8">
-                                        <label for="harga" class="form-label">Harga</label>
-                                        <input type="number" class="form-control @error('harga') is-invalid @enderror"
-                                            id="harga" name="harga" value="{{ old('harga') }}">
+                                        <label for="harga_display" class="form-label">Harga</label>
+                                        <input type="text" class="form-control @error('harga') is-invalid @enderror"
+                                            id="harga_display"
+                                            value="{{ old('harga') ? number_format(old('harga'), 0, ',', '.') : '' }}">
+                                        <input type="hidden" id="harga" name="harga" value="{{ old('harga') }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label for="mata_uang" class="form-label">Tipe</label>
@@ -120,10 +122,32 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function formatRupiah(angka) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
+        }
+
         function resetForm() {
             var form = document.getElementById('dataForm');
             form.reset();
+            document.getElementById('harga').value = '';
+            document.getElementById('harga_display').value = '';
         }
+
+        document.getElementById('harga_display').addEventListener('input', function() {
+            var rawValue = this.value.replace(/\./g, '');
+            document.getElementById('harga').value = rawValue;
+            this.value = formatRupiah(this.value);
+        });
     </script>
 
     <script>
@@ -150,7 +174,10 @@
                                         .nama_barang;
                                     document.getElementById('kode_barang').value = item
                                         .kode_barang;
-                                    document.getElementById('harga').value = item.harga || '';
+                                    var rawHarga = item.harga ? parseFloat(item.harga) : '';
+                                    document.getElementById('harga').value = rawHarga;
+                                    document.getElementById('harga_display').value = rawHarga ?
+                                        formatRupiah(rawHarga.toString()) : '';
                                     document.getElementById('vendor').value = item.vendor || '';
                                     if (item.mata_uang) {
                                         document.getElementById('mata_uang').value = item
