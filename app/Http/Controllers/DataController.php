@@ -292,7 +292,7 @@ class DataController extends Controller
 
     public function searchNamaBarang($term)
     {
-        $results = Sparepart::select('nama_barang', 'kode_barang')
+        $results = Sparepart::select('nama_barang', 'kode_barang', 'harga', 'uom', 'mata_uang', 'vendor', 'address', 'lifetime', 'leadtime', 'stock_wrhs')
             ->distinct()
             ->where('nama_barang', 'like', "%{$term}%")
             ->get();

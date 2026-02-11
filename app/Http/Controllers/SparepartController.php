@@ -11,7 +11,7 @@ use App\Imports\SparepartsImports;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Http\Response;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class SparepartController extends Controller
 {

@@ -23,7 +23,6 @@
                 </div>
             </div>
         </div>
-        <!-- end page title -->
         
         <div class="row">
             <div class="col-xl-4 col-md-6">
@@ -96,7 +95,6 @@
                 </form>
             </div>
             <div class="col-md-6 text-right">
-                <!-- Optionally, you can add additional buttons or content here -->
             </div>
         </div>
 
@@ -125,9 +123,7 @@
                 </div>
             </div>
         </div>
-        <!-- end row-->                        
     </div>
-    <!-- container-fluid -->
 </div>
 @endsection
 
@@ -180,7 +176,7 @@
                 render: function(data, type, row) {
                     return '<button class="btn btn-outline-primary custom-btn add-data" style="border-radius: 10px;" data-nama="' + row.nama_barang + '" data-kode="' + row.kode_barang + '">-</button>';
                 },
-                responsivePriority: 1 // Always priority
+                responsivePriority: 1 
             }
         ],
         paging: true,
