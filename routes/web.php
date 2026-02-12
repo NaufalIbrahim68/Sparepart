@@ -82,9 +82,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     //input stock part
     Route::resource('/stock', StockController::class);
+    Route::get('/stock-data', [StockController::class, 'getData'])->name('stock.data');
+    Route::post('/stock-update', [StockController::class, 'updateStock'])->name('stock.updateStock');
 
     //input harga part
     Route::resource('/harga', HargaController::class);
+    Route::get('/harga-data', [HargaController::class, 'getData'])->name('harga.data');
+    Route::post('/harga-update', [HargaController::class, 'updateHarga'])->name('harga.updateHarga');
 
     //fungsi filter
     Route::get('/data/no-stations/{line}', [DataController::class, 'getNoStationsByLine'])->name('data.no-stations');

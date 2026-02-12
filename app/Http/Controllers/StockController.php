@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Data;
 use App\Models\Sparepart;
+use Yajra\DataTables\Facades\DataTables;
 use Exception;
 
 class StockController extends Controller
@@ -129,6 +130,63 @@ class StockController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    /**
+     * Update stock inline via AJAX.
+     */
+    public function updateStock(Request $request)
+    {
+        $request->validate([
+            'id_sp' => 'required|integer',
+            'address' => 'nullable|string|max:255',
+            'lifetime' => 'nullable|numeric|min:0',
+            'leadtime' => 'nullable|numeric|min:0',
+            'stock_wrhs' => 'nullable|numeric|min:0',
+        ]);
+
+        try {
+            $sparepart = Sparepart::where('id_sp', $request->id_sp)->firstOrFail();
+            $sparepart->address = $request->address;
+            $sparepart->lifetime = $request->lifetime;
+            $sparepart->leadtime = $request->leadtime;
+            $sparepart->stock_wrhs = $request->stock_wrhs;
+            $sparepart->save();
+
+            return response()->json(['success' => true, 'message' => 'Data berhasil diperbarui.']);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal memperbarui data.'], 500);
+        }
+    }
+
+    /**
+     * Get data for DataTable.
+     */
+    public function getData()
+    {
+        $spareparts = Sparepart::select(['id_sp', 'nama_barang', 'kode_barang', 'address', 'lifetime', 'leadtime', 'stock_wrhs']);
+
+        return DataTables::of($spareparts)
+            ->editColumn('address', function ($row) {
+                return '<input type="text" class="form-control form-control-sm address-input" data-id="' . $row->id_sp . '" data-original="' . ($row->address ?? '') . '" value="' . ($row->address ?? '') . '" style="width:120px;">';
+            })
+            ->editColumn('lifetime', function ($row) {
+                return '<input type="number" class="form-control form-control-sm lifetime-input" data-id="' . $row->id_sp . '" data-original="' . ($row->lifetime ?? '') . '" value="' . ($row->lifetime ?? '') . '" style="width:90px;">';
+            })
+            ->editColumn('leadtime', function ($row) {
+                return '<input type="number" class="form-control form-control-sm leadtime-input" data-id="' . $row->id_sp . '" data-original="' . ($row->leadtime ?? '') . '" value="' . ($row->leadtime ?? '') . '" style="width:90px;">';
+            })
+            ->editColumn('stock_wrhs', function ($row) {
+                return '<input type="number" class="form-control form-control-sm stock-wrhs-input" data-id="' . $row->id_sp . '" data-original="' . ($row->stock_wrhs ?? '') . '" value="' . ($row->stock_wrhs ?? '') . '" style="width:90px;">';
+            })
+            ->addColumn('aksi', function ($row) {
+                return '<div class="d-flex gap-1">
+                    <button type="button" class="btn btn-sm btn-success btn-simpan" data-id="' . $row->id_sp . '" title="Simpan"><i class="fas fa-save"></i> Simpan</button>
+                    <button type="button" class="btn btn-sm btn-secondary btn-reset-stock" data-id="' . $row->id_sp . '" title="Reset"><i class="fas fa-undo"></i> Reset</button>
+                </div>';
+            })
+            ->rawColumns(['address', 'lifetime', 'leadtime', 'stock_wrhs', 'aksi'])
+            ->make(true);
     }
 
     /**
