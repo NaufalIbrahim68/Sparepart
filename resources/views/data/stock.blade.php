@@ -15,10 +15,7 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-title mb-0">Data Stock Part</h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#inputStockModal">
-                                    <i data-feather="plus"></i> Input Stock
-                                </button>
+                                
                             </div>
                         </div>
                         <div class="card-body">

@@ -15,10 +15,7 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-title mb-0">Data Harga Part</h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#inputHargaModal">
-                                    <i data-feather="plus"></i> Input Harga
-                                </button>
+                                
                             </div>
                         </div>
                         <div class="card-body">
