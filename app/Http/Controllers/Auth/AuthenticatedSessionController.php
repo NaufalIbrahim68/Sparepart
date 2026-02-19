@@ -24,14 +24,14 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string'],
+            'npk' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        $credentials = $request->only('name', 'password');
+        $credentials = $request->only('npk', 'password');
 
-        // Fetch the user by name
-        $user = \App\Models\User::where('name', $request->input('name'))->first();
+        // Fetch the user by npk
+        $user = \App\Models\User::where('npk', $request->input('npk'))->first();
 
         // Check if the user exists and the password matches (using hash verification)
         if ($user && Hash::check($request->input('password'), $user->password)) {
@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'name' => 'Username atau Password salah tolong login kembali',
+            'npk' => 'NPK atau Password salah tolong login kembali',
         ]);
     }
 

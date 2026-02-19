@@ -34,16 +34,16 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string'],
+            'npk' => ['required', 'string', 'unique:users'],
         ]);
 
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'],
+            'npk' => $validated['npk'],
         ]);
 
         return redirect()->route('register')->with('status', 'Registration successful! Please login.');
     }
-
 }
-
